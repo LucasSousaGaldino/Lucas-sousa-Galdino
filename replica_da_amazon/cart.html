@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho de compras | Amazon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            amazon_blue: { light: '#232f3e', DEFAULT: '#131921' },
+            amazon_yellow: { light: '#f3a847', DEFAULT: '#febd69' },
+            amazon_orange: '#e47911'
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="flex min-h-screen flex-col bg-[#eaeded] font-sans text-gray-900">
+  <header class="sticky top-0 z-50 bg-amazon_blue text-white shadow-md">
+    <div class="mx-auto flex max-w-[1500px] items-center justify-between gap-2 p-2 text-sm md:gap-4 lg:px-4">
+      <a href="main.html" aria-label="Página inicial da Amazon">
+        <img src="../componentes/logotipo/amazon-logo-branco.png" alt="Logótipo Amazon" class="h-8 object-contain">
+      </a>
+      <button type="button" class="hidden cursor-pointer items-center rounded border border-transparent p-2 text-left leading-tight hover:border-white lg:flex">
+        <i class="fa-solid fa-location-dot mr-2 mb-1 self-end text-lg text-gray-300"></i>
+        <span class="text-xs">
+          <span class="block text-[11px] text-gray-300">Enviar para Brasil</span>
+          <span class="block text-sm font-bold text-white">Sua Cidade 00000</span>
+        </span>
+      </button>
+      <form id="cartSearchForm" class="flex h-10 flex-1 items-center overflow-hidden rounded-md bg-white focus-within:ring-2 focus-within:ring-amazon_yellow">
+        <select id="cartSearchCategory" aria-label="Categoria" class="h-full max-w-24 shrink-0 cursor-pointer border-r border-gray-300 bg-gray-100 px-2 text-xs text-gray-700 outline-none hover:bg-gray-200 sm:max-w-none">
+          <option value="all">Todos</option>
+        </select>
+        <input id="cartSearch" type="search" placeholder="Buscar na Amazon.com.br" class="w-full flex-1 px-3 py-2 text-sm text-black outline-none">
+        <button type="submit" class="flex h-full items-center justify-center bg-amazon_yellow px-5 text-amazon_blue transition hover:bg-amazon_yellow-light" aria-label="Buscar">
+          <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        </button>
+      </form>
+      <div class="flex shrink-0 items-center gap-1 sm:gap-4">
+        <div class="hidden cursor-pointer items-center gap-1 rounded border border-transparent p-2 text-xs font-bold hover:border-white md:flex">
+          <span class="text-base">🇧🇷</span><span>PT</span>
+        </div>
+        <a href="login.html" class="block rounded border border-transparent p-1 text-xs leading-tight hover:border-white sm:p-2">
+          <span class="block text-[11px] text-gray-200">Olá, Faça seu login</span>
+          <span class="flex items-center gap-1 text-xs font-bold text-white sm:text-sm">Contas e Listas <i class="fa-solid fa-caret-down text-[10px] text-gray-400"></i></span>
+        </a>
+        <div class="hidden cursor-pointer rounded border border-transparent p-2 text-xs leading-tight hover:border-white md:block">
+          <span class="block text-[11px] text-gray-200">Devoluções</span>
+          <span class="block text-sm font-bold text-white">e Pedidos</span>
+        </div>
+        <a href="cart.html" class="relative flex items-center rounded border border-transparent p-2 text-white hover:border-white" aria-label="Abrir carrinho">
+          <span class="relative">
+            <i class="fa-solid fa-cart-shopping text-2xl sm:text-3xl"></i>
+            <span id="cartHeaderCount" class="absolute -top-1 left-1/2 -translate-x-1/2 rounded-full bg-amazon_orange px-1.5 py-0.5 text-xs font-bold text-white">0</span>
+          </span>
+          <span class="ml-1 mt-3 hidden text-xs font-bold sm:inline sm:text-sm">Carrinho</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  <nav class="flex items-center gap-4 overflow-x-auto whitespace-nowrap bg-amazon_blue-light px-3 py-1.5 text-xs text-white shadow-inner sm:text-sm">
+    <a href="main.html#products-grid" class="flex cursor-pointer items-center gap-1.5 rounded p-1 font-bold transition hover:border hover:border-white">
+      <i class="fa-solid fa-bars text-base"></i><span>Todos</span>
+    </a>
+    <a href="main.html#products-grid" class="rounded p-1 hover:border hover:border-white">Mais Vendidos</a>
+    <a href="main.html#products-grid" class="rounded p-1 font-semibold text-amazon_yellow hover:border hover:border-white">Ofertas do Dia</a>
+    <a href="main.html#products-grid" class="hidden rounded p-1 hover:border hover:border-white md:inline">Eletrônicos</a>
+    <a href="main.html#products-grid" class="hidden rounded p-1 hover:border hover:border-white lg:inline">Computadores</a>
+    <span class="ml-auto hidden px-2 text-xs font-bold text-amazon_yellow sm:inline">Especial de Ofertas de Tecnologia</span>
+  </nav>
+
+  <main class="mx-auto w-full max-w-7xl flex-1 px-3 py-5 sm:px-5 sm:py-8">
+    <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <section class="min-w-0 bg-white p-4 shadow-sm sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 pb-4">
+          <div>
+            <h1 class="text-2xl font-bold sm:text-3xl">Carrinho de compras</h1>
+            <p id="cartItemCount" class="mt-1 text-sm text-gray-600">0 produtos</p>
+          </div>
+          <button id="clearCartButton" type="button" class="text-sm text-blue-700 hover:text-orange-700 hover:underline">
+            Esvaziar carrinho
+          </button>
+        </div>
+        <label id="selectAllContainer" class="flex items-center gap-2 border-b border-gray-200 py-3 text-sm text-gray-700">
+          <input id="selectAllCheckbox" type="checkbox" class="h-4 w-4 accent-[#232f3e]">
+          Selecionar todos os produtos
+        </label>
+        <div id="cartItems" class="divide-y divide-gray-200"></div>
+        <div id="emptyCart" class="hidden py-14 text-center">
+          <i class="fa-solid fa-cart-shopping text-5xl text-gray-300"></i>
+          <h2 class="mt-4 text-xl font-bold">Seu carrinho está vazio</h2>
+          <p class="mt-2 text-sm text-gray-600">Explore a loja e adicione produtos para vê-los aqui.</p>
+          <a href="main.html" class="mt-5 inline-block rounded bg-amazon_yellow px-6 py-2.5 text-sm font-bold text-amazon_blue hover:bg-amazon_yellow-light">
+            Voltar à loja
+          </a>
+        </div>
+      </section>
+
+      <aside class="bg-white p-5 shadow-sm">
+        <p id="freeShippingMessage" class="mb-4 text-sm text-green-700">
+          <i class="fa-solid fa-check mr-1"></i> Seus produtos estão no carrinho.
+        </p>
+        <div class="flex items-center justify-between gap-3">
+          <span class="text-sm text-gray-700">Subtotal dos selecionados</span>
+          <strong id="cartSubtotal" class="text-xl font-bold">R$ 0,00</strong>
+        </div>
+        <p id="selectedCount" class="mt-1 text-xs text-gray-500">0 itens selecionados</p>
+        <button id="checkoutButton" type="button" class="mt-5 w-full rounded-full bg-amazon_yellow py-2.5 text-sm font-medium hover:bg-amazon_yellow-light disabled:cursor-not-allowed disabled:opacity-50">
+          Prosseguir para o pedido
+        </button>
+        <p class="mt-3 text-xs leading-relaxed text-gray-500">Esta é uma demonstração educacional. Nenhum pagamento ou pedido real será processado.</p>
+      </aside>
+    </div>
+
+    <section class="mt-7 bg-white p-4 shadow-sm sm:p-6">
+      <h2 class="text-xl font-bold">Você também pode gostar</h2>
+      <div id="recommendations" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4"></div>
+    </section>
+  </main>
+
+  <footer class="mt-auto bg-amazon_blue-light text-xs text-white">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full bg-[#37475a] py-3 text-center text-sm font-medium transition hover:bg-[#485769]">
+      Voltar ao início
+    </button>
+    <div class="mx-auto grid max-w-[1200px] grid-cols-2 gap-8 px-4 py-10 md:grid-cols-4">
+      <div>
+        <h3 class="mb-3 text-sm font-bold">Conheça-nos</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#" class="hover:underline">Informações corporativas</a></li>
+          <li><a href="#" class="hover:underline">Carreiras</a></li>
+          <li><a href="#" class="hover:underline">Comunicados à imprensa</a></li>
+          <li><a href="#" class="hover:underline">Comunidade Amazon</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-bold">Ganhe Dinheiro conosco</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#" class="hover:underline">Venda na Amazon</a></li>
+          <li><a href="#" class="hover:underline">Seja um associado</a></li>
+          <li><a href="#" class="hover:underline">Anuncie seus produtos</a></li>
+          <li><a href="#" class="hover:underline">Publicação independente</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-bold">Pagamento</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#" class="hover:underline">Cartões de crédito e débito</a></li>
+          <li><a href="#" class="hover:underline">Boleto Bancário</a></li>
+          <li><a href="#" class="hover:underline">Pix na Amazon</a></li>
+          <li><a href="#" class="hover:underline">Cartão Presente</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-bold">Deixe-nos ajudar você</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#" class="hover:underline">Sua conta</a></li>
+          <li><a href="#" class="hover:underline">Seus pedidos</a></li>
+          <li><a href="#" class="hover:underline">Frete e devoluções</a></li>
+          <li><a href="#" class="hover:underline">Ajuda e Suporte</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-700 bg-amazon_blue py-6 text-center">
+      <a href="main.html" aria-label="Voltar à página inicial da Amazon" class="mb-3 inline-flex justify-center">
+        <img src="../componentes/logotipo/amazon-logo-branco.png" alt="Logótipo Amazon" class="h-8 w-24 object-contain">
+      </a>
+      <p class="mx-auto max-w-xl px-4 text-[11px] text-gray-400">
+        Esta é uma réplica desenvolvida exclusivamente com fins educacionais e de demonstração de habilidades de desenvolvimento web (HTML5, Tailwind CSS e Vanilla JS). Não possui vínculos comerciais com a Amazon.com, Inc.
+      </p>
+      <p class="mt-2 text-[10px] text-gray-500">© 2026 Projeto Educacional - Feito para fins de estudo.</p>
+    </div>
+  </footer>
+
+  <script src="products.js"></script>
+  <script>
+    const products = window.amazonProducts;
+    const cartItems = document.getElementById('cartItems');
+    const emptyCart = document.getElementById('emptyCart');
+    const selectedIds = new Set();
+    let cart = JSON.parse(localStorage.getItem('amazonCart') || '[]');
+    cart.forEach((item) => selectedIds.add(Number(item.id)));
+    document.getElementById('cartHeaderCount').textContent = cart.reduce((total, item) => total + Number(item.quantity), 0);
+
+    const formatPrice = (price) => Number(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const saveCart = () => localStorage.setItem('amazonCart', JSON.stringify(cart));
+
+    function updateCartSummary() {
+      const hasItems = cart.length > 0;
+      document.getElementById('cartItemCount').textContent = `${cart.reduce((sum, item) => sum + Number(item.quantity), 0)} produtos`;
+      const allSelected = hasItems && cart.every((item) => selectedIds.has(Number(item.id)));
+      document.getElementById('selectAllCheckbox').checked = allSelected;
+      const selectedItems = cart.filter((item) => selectedIds.has(Number(item.id)));
+      const selectedQuantity = selectedItems.reduce((sum, item) => sum + Number(item.quantity), 0);
+      const subtotal = selectedItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
+      document.getElementById('cartSubtotal').textContent = formatPrice(subtotal);
+      document.getElementById('selectedCount').textContent = `${selectedQuantity} itens selecionados`;
+      document.getElementById('checkoutButton').disabled = selectedItems.length === 0;
+    }
+
+    function renderCart() {
+      cartItems.replaceChildren();
+      const hasItems = cart.length > 0;
+      emptyCart.classList.toggle('hidden', hasItems);
+      document.getElementById('selectAllContainer').classList.toggle('hidden', !hasItems);
+      document.getElementById('clearCartButton').classList.toggle('hidden', !hasItems);
+
+      cart.forEach((item) => {
+        const row = document.createElement('article');
+        row.className = 'grid gap-3 py-5 sm:grid-cols-[auto_72px_minmax(0,1fr)_auto] sm:items-start';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = selectedIds.has(Number(item.id));
+        checkbox.dataset.action = 'select';
+        checkbox.dataset.id = item.id;
+        checkbox.className = 'mt-1 h-4 w-4 accent-[#232f3e]';
+        checkbox.setAttribute('aria-label', `Selecionar ${item.title}`);
+
+        const iconBox = document.createElement('a');
+        iconBox.href = `product.html?id=${encodeURIComponent(item.id)}`;
+        iconBox.className = 'flex h-[72px] w-[72px] items-center justify-center rounded bg-gray-100';
+        const icon = document.createElement('i');
+        icon.className = `${item.icon || 'fa-solid fa-box'} ${item.iconColor || 'text-gray-500'} text-3xl`;
+        iconBox.append(icon);
+
+        const details = document.createElement('div');
+        details.className = 'min-w-0';
+        const title = document.createElement('a');
+        title.href = `product.html?id=${encodeURIComponent(item.id)}`;
+        title.className = 'font-medium text-blue-800 hover:text-orange-700 hover:underline';
+        title.textContent = item.title;
+        const availability = document.createElement('p');
+        availability.className = 'mt-1 text-xs text-green-700';
+        availability.textContent = 'Disponível';
+        const prime = document.createElement('p');
+        prime.className = 'mt-1 text-xs font-bold text-sky-700';
+        prime.textContent = item.prime ? '✓ Prime' : '';
+        const controls = document.createElement('div');
+        controls.className = 'mt-3 flex flex-wrap items-center gap-3 text-xs';
+        const quantity = document.createElement('label');
+        quantity.className = 'flex items-center gap-2';
+        quantity.textContent = 'Qtd.:';
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.min = '1';
+        quantityInput.max = '99';
+        quantityInput.value = item.quantity;
+        quantityInput.dataset.action = 'quantity';
+        quantityInput.dataset.id = item.id;
+        quantityInput.className = 'w-16 rounded border border-gray-300 px-2 py-1 text-sm';
+        quantityInput.setAttribute('aria-label', `Quantidade de ${item.title}`);
+        quantity.append(quantityInput);
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.dataset.action = 'remove';
+        remove.dataset.id = item.id;
+        remove.className = 'text-blue-700 hover:underline';
+        remove.textContent = 'Excluir';
+        controls.append(quantity, remove);
+        details.append(title, availability, prime, controls);
+
+        const price = document.createElement('strong');
+        price.className = 'whitespace-nowrap text-lg';
+        price.textContent = formatPrice(item.price * item.quantity);
+        row.append(checkbox, iconBox, details, price);
+        cartItems.append(row);
+      });
+      updateCartSummary();
+    }
+
+    function renderRecommendations() {
+      const container = document.getElementById('recommendations');
+      container.replaceChildren();
+      products.filter((product) => !cart.some((item) => Number(item.id) === Number(product.id))).slice(0, 4).forEach((product) => {
+        const card = document.createElement('article');
+        card.className = 'flex min-w-0 flex-col rounded border border-gray-200 p-3';
+        const productLink = document.createElement('a');
+        productLink.href = `product.html?id=${encodeURIComponent(product.id)}`;
+        productLink.className = 'flex h-20 items-center justify-center rounded bg-gray-50';
+        const icon = document.createElement('i');
+        icon.className = `${product.icon} ${product.iconColor} text-3xl`;
+        productLink.append(icon);
+        const title = document.createElement('a');
+        title.href = productLink.href;
+        title.className = 'mt-3 line-clamp-2 min-h-10 text-sm text-blue-800 hover:underline';
+        title.textContent = product.title;
+        const price = document.createElement('strong');
+        price.className = 'mt-2 text-sm';
+        price.textContent = formatPrice(product.price);
+        const addButton = document.createElement('button');
+        addButton.type = 'button';
+        addButton.dataset.action = 'recommend';
+        addButton.dataset.id = product.id;
+        addButton.className = 'mt-3 rounded-full bg-amazon_yellow px-2 py-2 text-xs hover:bg-amazon_yellow-light';
+        addButton.textContent = 'Adicionar ao carrinho';
+        card.append(productLink, title, price, addButton);
+        container.append(card);
+      });
+    }
+
+    cartItems.addEventListener('change', (event) => {
+      const target = event.target;
+      const id = Number(target.dataset.id);
+      if (target.dataset.action === 'select') {
+        if (target.checked) selectedIds.add(id);
+        else selectedIds.delete(id);
+        renderCart();
+      } else if (target.dataset.action === 'quantity') {
+        const quantity = Math.min(99, Math.max(1, Number.parseInt(target.value, 10) || 1));
+        const item = cart.find((entry) => Number(entry.id) === id);
+        if (!item) return;
+        item.quantity = quantity;
+        target.value = quantity;
+        target.closest('article').querySelector('strong').textContent = formatPrice(item.price * quantity);
+        saveCart();
+        updateCartSummary();
+      }
+    });
+
+    cartItems.addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-action="remove"]');
+      if (!button) return;
+      const id = Number(button.dataset.id);
+      cart = cart.filter((item) => Number(item.id) !== id);
+      selectedIds.delete(id);
+      saveCart();
+      renderCart();
+      renderRecommendations();
+    });
+
+    document.getElementById('selectAllCheckbox').addEventListener('change', (event) => {
+      if (event.target.checked) cart.forEach((item) => selectedIds.add(Number(item.id)));
+      else selectedIds.clear();
+      renderCart();
+    });
+
+    document.getElementById('clearCartButton').addEventListener('click', () => {
+      cart = [];
+      selectedIds.clear();
+      saveCart();
+      renderCart();
+      renderRecommendations();
+    });
+
+    document.getElementById('recommendations').addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-action="recommend"]');
+      if (!button) return;
+      const product = products.find((item) => Number(item.id) === Number(button.dataset.id));
+      if (!product) return;
+      const existing = cart.find((item) => Number(item.id) === Number(product.id));
+      if (existing) existing.quantity = Math.min(99, Number(existing.quantity) + 1);
+      else cart.push({ ...product, quantity: 1 });
+      selectedIds.add(Number(product.id));
+      saveCart();
+      renderCart();
+      renderRecommendations();
+    });
+
+    document.getElementById('checkoutButton').addEventListener('click', () => {
+      const selected = cart.filter((item) => selectedIds.has(Number(item.id)));
+      if (selected.length === 0) return;
+      window.alert('Pedido simulado com sucesso. Este projeto não processa pagamentos reais.');
+      cart = cart.filter((item) => !selectedIds.has(Number(item.id)));
+      selectedIds.clear();
+      saveCart();
+      renderCart();
+      renderRecommendations();
+    });
+
+    document.getElementById('cartSearchForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const query = document.getElementById('cartSearch').value.trim();
+      window.location.href = `main.html${query ? `?q=${encodeURIComponent(query)}` : ''}`;
+    });
+
+    renderCart();
+    renderRecommendations();
+  </script>
+</body>
+</html>

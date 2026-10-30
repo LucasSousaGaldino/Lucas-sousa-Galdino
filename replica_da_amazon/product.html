@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon.com.br : Produto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            amazon_blue: {
+              light: '#232f3e',
+              DEFAULT: '#131921'
+            },
+            amazon_yellow: {
+              light: '#f3a847',
+              DEFAULT: '#febd69'
+            },
+            amazon_gray: '#eaeded',
+            amazon_orange: '#e47911',
+            amazon: {
+              navy: '#131921',
+              lightNavy: '#232f3e',
+              yellow: '#FFD814',
+              yellowHover: '#F7CA00',
+              orange: '#FFA41C',
+              orangeHover: '#FA8900',
+              blueLink: '#007185',
+              blueHover: '#C45500',
+              badge: '#C45500'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-white text-gray-900 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+  <header class="sticky top-0 z-50 bg-amazon_blue text-white shadow-md">
+    <div class="mx-auto flex max-w-[1500px] items-center justify-between gap-2 p-2 text-sm md:gap-4 lg:px-4">
+      <a href="main.html" aria-label="Página inicial da Amazon">
+        <img src="../componentes/logotipo/amazon-logo-branco.png" alt="Logótipo Amazon" class="h-8 object-contain">
+      </a>
+
+      <button type="button" class="hidden cursor-pointer items-center rounded border border-transparent p-2 text-left leading-tight hover:border-white lg:flex">
+        <i class="fa-solid fa-location-dot mr-2 mb-1 self-end text-lg text-gray-300"></i>
+        <span class="text-xs">
+          <span class="block text-[11px] text-gray-300">Enviar para Brasil</span>
+          <span class="block text-sm font-bold text-white">Sua Cidade 00000</span>
+        </span>
+      </button>
+
+      <form id="productSearchForm" class="flex h-10 flex-1 items-center overflow-hidden rounded-md bg-white focus-within:ring-2 focus-within:ring-amazon_yellow">
+        <select id="searchCategory" aria-label="Categoria" class="h-full max-w-24 shrink-0 cursor-pointer border-r border-gray-300 bg-gray-100 px-2 text-xs text-gray-700 outline-none hover:bg-gray-200 sm:max-w-none">
+          <option value="all font-medium">Todos</option>
+        </select>
+        <input id="searchInput" type="search" placeholder="Buscar na Amazon.com.br" class="w-full flex-1 px-3 py-2 text-sm text-black outline-none">
+        <button type="submit" class="flex h-full items-center justify-center bg-amazon_yellow px-5 text-amazon_blue transition hover:bg-amazon_yellow-light" aria-label="Buscar">
+          <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        </button>
+      </form>
+
+      <div class="flex shrink-0 items-center gap-1 sm:gap-4">
+        <div class="hidden cursor-pointer items-center gap-1 rounded border border-transparent p-2 text-xs font-bold hover:border-white md:flex">
+          <span class="text-base">🇧🇷</span><span>PT</span>
+        </div>
+        <a href="login.html" class="block rounded border border-transparent p-1 text-xs leading-tight hover:border-white sm:p-2">
+          <span class="block text-[11px] text-gray-200">Olá, Faça seu login</span>
+          <span class="flex items-center gap-1 text-xs font-bold text-white sm:text-sm">Contas e Listas <i class="fa-solid fa-caret-down text-[10px] text-gray-400"></i></span>
+        </a>
+        <div class="hidden cursor-pointer rounded border border-transparent p-2 text-xs leading-tight hover:border-white md:block">
+          <span class="block text-[11px] text-gray-200">Devoluções</span>
+          <span class="block text-sm font-bold text-white">e Pedidos</span>
+        </div>
+        <a id="cartIcon" href="cart.html" class="relative flex cursor-pointer items-center rounded border border-transparent p-2 text-white hover:border-white" aria-label="Abrir carrinho">
+          <span class="relative">
+            <i class="fa-solid fa-cart-shopping text-2xl sm:text-3xl"></i>
+            <span id="cartCount" class="absolute -top-1 left-1/2 -translate-x-1/2 rounded-full bg-amazon_orange px-1.5 py-0.5 text-xs font-bold text-white">0</span>
+          </span>
+          <span class="ml-1 mt-3 hidden text-xs font-bold sm:inline sm:text-sm">Carrinho</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="flex items-center gap-4 overflow-x-auto whitespace-nowrap bg-amazon_blue-light px-3 py-1.5 text-xs text-white shadow-inner sm:text-sm">
+    <a href="main.html#products-grid" class="flex cursor-pointer items-center gap-1.5 rounded p-1 font-bold transition hover:border hover:border-white">
+      <i class="fa-solid fa-bars text-base"></i><span>Todos</span>
+    </a>
+    <a href="main.html#products-grid" class="rounded p-1 hover:border hover:border-white">Mais Vendidos</a>
+    <a href="main.html#products-grid" class="rounded p-1 font-semibold text-amazon_yellow hover:border hover:border-white">Ofertas do Dia</a>
+    <a href="main.html#products-grid" class="hidden rounded p-1 hover:border hover:border-white md:inline">Eletrônicos</a>
+    <a href="main.html#products-grid" class="hidden rounded p-1 hover:border hover:border-white lg:inline">Computadores</a>
+    <span class="ml-auto hidden px-2 text-xs font-bold text-amazon_yellow sm:inline">Especial de Ofertas de Tecnologia</span>
+  </nav>
+
+  <!-- Breadcrumbs -->
+  <nav class="max-w-7xl mx-auto w-full px-4 py-2 text-[11px] text-gray-500 space-x-1 border-b border-gray-200">
+    <a href="main.html" class="hover:underline">Amazon.com.br</a>
+    <span>›</span>
+    <a href="main.html#products-grid" class="hover:underline">Todos os produtos</a>
+    <span>›</span>
+    <a href="main.html#products-grid" id="productCategory" class="hover:underline">Produtos</a>
+    <span>›</span>
+    <span id="productBreadcrumb" class="text-gray-700 font-medium">Echo Dot</span>
+  </nav>
+
+  <!-- Alerta de Ação / Modal Interno (Oculto) -->
+  <div id="toastAlert" class="hidden fixed top-4 right-4 z-50 bg-white border-l-4 border-green-500 shadow-xl rounded-r p-4 max-w-sm flex items-start space-x-3 transition-all duration-300">
+    <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+    <div>
+      <h4 id="toastTitle" class="text-xs font-bold text-gray-900">Adicionado ao carrinho</h4>
+      <p id="toastMessage" class="text-[11px] text-gray-600"></p>
+    </div>
+  </div>
+
+  <div id="productNotFound" class="hidden mx-auto w-full max-w-3xl px-4 py-16 text-center">
+    <h1 class="text-2xl font-bold text-gray-900">Produto não encontrado</h1>
+    <p class="mt-2 text-sm text-gray-600">Volte à loja e escolha um produto disponível.</p>
+    <a href="main.html" class="mt-5 inline-block rounded-full bg-amazon-yellow px-5 py-2 text-sm font-medium text-gray-900 hover:bg-amazon-yellowHover">Voltar à loja</a>
+  </div>
+
+  <!-- Container Principal do Produto -->
+  <main id="productPage" class="max-w-7xl mx-auto w-full px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1">
+
+    <div class="lg:col-span-5 flex items-center justify-center min-h-[320px] rounded border border-gray-200 bg-white p-8">
+      <i id="productIcon" class="fa-solid fa-podcast text-8xl text-blue-500" aria-hidden="true"></i>
+    </div>
+
+    <!-- COLUNA 2: Detalhes do Produto (4 cols em LG) -->
+    <div class="lg:col-span-4 space-y-3">
+      <!-- Tag / Badge -->
+      <span id="productBadge" class="inline-block bg-amazon-badge text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">
+        Opção da Amazon
+      </span>
+      <span id="productPrime" class="ml-2 hidden text-xs font-extrabold italic text-blue-600">prime</span>
+
+      <!-- Título -->
+      <h1 id="productTitle" class="text-xl font-medium text-gray-900 leading-snug">
+      </h1>
+      <p id="productDescription" class="text-sm leading-relaxed text-gray-700"></p>
+
+      <a href="#" onclick="event.preventDefault();" class="text-xs text-amazon-blueLink hover:text-amazon-blueHover hover:underline block">
+        Visite a loja da Amazon
+      </a>
+
+      <!-- Avaliações -->
+      <div class="flex items-center space-x-2 text-xs">
+        <div class="flex text-amber-500">
+          ★★★★★
+        </div>
+        <span id="productRating" class="text-amazon-blueLink font-medium">4.8</span>
+        <span class="text-gray-400">|</span>
+        <a href="#productHighlights" id="productReviews" class="text-amazon-blueLink hover:underline">12.450 avaliações</a>
+      </div>
+
+      <hr class="border-gray-200">
+
+      <!-- Bloco de Preço -->
+      <div class="space-y-1">
+        <p id="productOldPrice" class="text-xs text-gray-500 line-through"></p>
+        <div class="flex items-start">
+          <span class="text-xs text-gray-500 mt-1 mr-1">R$</span>
+          <span id="productPrice" class="text-3xl font-bold text-gray-900 leading-none">399</span>
+          <span id="productCents" class="text-xs text-gray-500 mt-1">,00</span>
+        </div>
+        <p class="text-xs text-gray-600">
+          em até <span id="productInstallments" class="font-bold">10x de R$ 39,90</span> sem juros
+        </p>
+        <p id="productShipping" class="text-xs text-green-700 font-medium flex items-center">
+          <span class="font-bold mr-1">prime</span> Frete GRÁTIS e devolução gratuita
+        </p>
+      </div>
+
+      <hr class="border-gray-200">
+
+      <hr class="border-gray-200">
+
+      <!-- Sobre este item -->
+      <div>
+        <h3 class="text-sm font-bold text-gray-900 mb-2">Sobre este item</h3>
+        <ul id="productHighlights" class="list-disc list-inside text-xs text-gray-700 space-y-1.5 leading-relaxed">
+          <li>Conheça os principais recursos deste produto.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- COLUNA 3: Caixa de Compra / Buy Box (3 cols em LG) -->
+    <div class="lg:col-span-3">
+      <div class="border border-gray-300 rounded-lg p-4 bg-white shadow-sm space-y-4">
+        
+        <!-- Preço BuyBox -->
+        <div>
+          <div class="flex items-start">
+            <span class="text-xs text-gray-500 mt-1 mr-1">R$</span>
+            <span id="buyBoxPrice" class="text-2xl font-bold text-gray-900 leading-none">399</span>
+            <span id="buyBoxCents" class="text-xs text-gray-500 mt-1">,00</span>
+          </div>
+          <p class="text-xs text-green-700 font-bold mt-1">Em estoque</p>
+        </div>
+
+        <!-- Seletor de Quantidade -->
+        <div>
+          <label for="quantitySelect" class="block text-xs font-medium text-gray-700 mb-1">Quantidade:</label>
+          <select id="quantitySelect" class="w-full text-xs border border-gray-400 rounded p-1.5 bg-gray-50 focus:outline-none focus:border-amber-500">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="space-y-2">
+          <button id="btnAddToCart" class="w-full bg-amazon-yellow hover:bg-amazon-yellowHover border border-yellow-500 text-xs py-2 rounded-full font-medium shadow-sm active:bg-yellow-600 focus:outline-none">
+            Adicionar ao carrinho
+          </button>
+          
+          <button id="btnBuyNow" class="w-full bg-amazon-orange hover:bg-amazon-orangeHover border border-orange-600 text-xs py-2 rounded-full font-medium shadow-sm active:bg-orange-700 focus:outline-none">
+            Comprar agora
+          </button>
+        </div>
+
+        <!-- Detalhes do Vendedor -->
+        <div class="text-[11px] text-gray-600 space-y-1 pt-2 border-t border-gray-200">
+          <div class="flex justify-between">
+            <span>Enviado por</span>
+            <span class="text-gray-900 font-medium">Amazon.com.br</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Vendido por</span>
+            <span class="text-gray-900 font-medium">Amazon.com.br</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Devolução</span>
+            <span class="text-amazon-blueLink hover:underline cursor-pointer">Elegível para devolução</span>
+          </div>
+        </div>
+
+        <!-- Adicionar à lista -->
+        <button onclick="event.preventDefault(); showToast('Lista de Desejos', 'Item guardado na sua lista de compras.');" class="w-full text-left text-xs text-amazon-blueLink hover:text-amazon-blueHover hover:underline pt-2 border-t border-gray-200">
+          Adicionar à Lista de Desejos
+        </button>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="mt-auto bg-amazon_blue-light text-xs text-white">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full bg-[#37475a] py-3 text-center text-sm font-medium transition hover:bg-[#485769]">
+      Voltar ao início
+    </button>
+    <div class="mx-auto grid max-w-[1200px] grid-cols-2 gap-8 px-4 py-10 md:grid-cols-4">
+      <div>
+        <h3 class="mb-3 text-sm font-bold">Conheça-nos</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#" class="hover:underline">Informações corporativas</a></li>
+          <li><a href="#" class="hover:underline">Carreiras</a></li>
+          <li><a href="#" class="hover:underline">Comunicados à imprensa</a></li>
+          <li><a href="#" class="hover:underline">Comunidade Amazon</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-bold">Ganhe Dinheiro conosco</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#" class="hover:underline">Venda na Amazon</a></li>
+          <li><a href="#" class="hover:underline">Seja um associado</a></li>
+          <li><a href="#" class="hover:underline">Anuncie seus produtos</a></li>
+          <li><a href="#" class="hover:underline">Publicação independente</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-bold">Pagamento</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#" class="hover:underline">Cartões de crédito e débito</a></li>
+          <li><a href="#" class="hover:underline">Boleto Bancário</a></li>
+          <li><a href="#" class="hover:underline">Pix na Amazon</a></li>
+          <li><a href="#" class="hover:underline">Cartão Presente</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-bold">Deixe-nos ajudar você</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#" class="hover:underline">Sua conta</a></li>
+          <li><a href="#" class="hover:underline">Seus pedidos</a></li>
+          <li><a href="#" class="hover:underline">Frete e devoluções</a></li>
+          <li><a href="#" class="hover:underline">Ajuda e Suporte</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-700 bg-amazon_blue py-6 text-center">
+      <a href="main.html" aria-label="Voltar à página inicial da Amazon" class="mb-3 inline-flex justify-center">
+        <img src="../componentes/logotipo/amazon-logo-branco.png" alt="Logótipo Amazon" class="h-8 w-24 object-contain">
+      </a>
+      <p class="mx-auto max-w-xl px-4 text-[11px] text-gray-400">
+        Esta é uma réplica desenvolvida exclusivamente com fins educacionais e de demonstração de habilidades de desenvolvimento web (HTML5, Tailwind CSS e Vanilla JS). Não possui vínculos comerciais com a Amazon.com, Inc.
+      </p>
+      <p class="mt-2 text-[10px] text-gray-500">© 2026 Projeto Educacional - Feito para fins de estudo.</p>
+    </div>
+  </footer>
+
+  <!-- Lógica JavaScript (Zero Redirecionamentos) -->
+  <script src="products.js"></script>
+  <script>
+    const products = window.amazonProducts;
+    const productId = Number(new URLSearchParams(window.location.search).get('id'));
+    const product = products.find(item => item.id === productId);
+    const cartCount = document.getElementById('cartCount');
+    const toastAlert = document.getElementById('toastAlert');
+    const toastTitle = document.getElementById('toastTitle');
+    const toastMessage = document.getElementById('toastMessage');
+    let cart = JSON.parse(localStorage.getItem('amazonCart') || '[]');
+    let cartCountValue = cart.reduce((total, item) => total + item.quantity, 0);
+    cartCount.textContent = cartCountValue;
+    const productPage = document.getElementById('productPage');
+    const productNotFound = document.getElementById('productNotFound');
+
+    if (!product) {
+      productPage.classList.add('hidden');
+      productNotFound.classList.remove('hidden');
+      throw new Error(`Produto ${productId} não encontrado.`);
+    }
+
+    const formattedPrice = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+    const priceParts = [
+      new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(Math.floor(product.price)),
+      Math.round((product.price % 1) * 100).toString().padStart(2, '0')
+    ];
+    const categoryNames = {
+      eletronicos: 'Eletrônicos',
+      livros: 'Livros',
+      casa: 'Casa e Cozinha',
+      moda: 'Moda',
+      beleza: 'Beleza',
+      esportes: 'Esportes',
+      brinquedos: 'Brinquedos',
+      automotivo: 'Automotivo',
+      alimentos: 'Alimentos e Bebidas',
+      pets: 'Pets',
+      papelaria: 'Papelaria',
+      cozinha: 'Eletroportáteis'
+    };
+
+    document.title = `Amazon.com.br : ${product.title}`;
+    const categoryName = categoryNames[product.category] || 'Produtos';
+    document.getElementById('productCategory').textContent = categoryName;
+    document.getElementById('productBreadcrumb').textContent = categoryName;
+    document.getElementById('productIcon').className = `${product.icon} ${product.iconColor} text-8xl`;
+    document.getElementById('productBadge').textContent = product.badge;
+    document.getElementById('productPrime').classList.toggle('hidden', !product.prime);
+    document.getElementById('productTitle').textContent = product.title;
+    document.getElementById('productDescription').textContent = product.description;
+    document.getElementById('productRating').textContent = product.rating.toFixed(1);
+    document.getElementById('productReviews').textContent = `${product.reviews.toLocaleString('pt-BR')} avaliações`;
+    document.getElementById('productPrice').textContent = priceParts[0];
+    document.getElementById('productCents').textContent = `,${priceParts[1]}`;
+    document.getElementById('productOldPrice').textContent = formattedPrice.format(product.oldPrice);
+    document.getElementById('buyBoxPrice').textContent = priceParts[0];
+    document.getElementById('buyBoxCents').textContent = `,${priceParts[1]}`;
+    document.getElementById('productInstallments').textContent = `10x de ${formattedPrice.format(product.price / 10)}`;
+    document.getElementById('productShipping').classList.toggle('hidden', !product.prime);
+    document.getElementById('productHighlights').replaceChildren(
+      ...product.highlights.map(highlight => {
+        const item = document.createElement('li');
+        item.textContent = highlight;
+        return item;
+      })
+    );
+
+    const searchCategory = document.getElementById('searchCategory');
+    Object.entries(categoryNames).forEach(([category, name]) => {
+      if (products.some(item => item.category === category)) {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = name;
+        searchCategory.appendChild(option);
+      }
+    });
+
+    document.getElementById('productSearchForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const params = new URLSearchParams();
+      params.set('q', document.getElementById('searchInput').value.trim());
+      params.set('category', searchCategory.value);
+      window.location.href = `main.html?${params.toString()}#products-grid`;
+    });
+
+    // Função de Exibição de Toast / Notificação
+    function showToast(title, msg) {
+      toastTitle.textContent = title;
+      toastMessage.textContent = msg;
+      toastAlert.classList.remove('hidden');
+
+      setTimeout(() => {
+        toastAlert.classList.add('hidden');
+      }, 3000);
+    }
+
+    // Ação: Adicionar ao Carrinho
+    document.getElementById('btnAddToCart').addEventListener('click', () => {
+      const qty = parseInt(document.getElementById('quantitySelect').value);
+      const cartItem = cart.find(item => item.id === product.id);
+      if (cartItem) {
+        cartItem.quantity += qty;
+      } else {
+        cart.push({ ...product, quantity: qty });
+      }
+      localStorage.setItem('amazonCart', JSON.stringify(cart));
+      cartCountValue = cart.reduce((total, item) => total + item.quantity, 0);
+      cartCount.textContent = cartCountValue;
+      showToast('Adicionado ao carrinho', `${qty}x ${product.title}`);
+    });
+
+    // Ação: Comprar Agora
+    document.getElementById('btnBuyNow').addEventListener('click', () => {
+      showToast('Pedido em processamento', 'Modo de demonstração: compra finalizada com sucesso!');
+    });
+
+  </script>
+</body>
+</html>
